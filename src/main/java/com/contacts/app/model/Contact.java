@@ -1,18 +1,33 @@
 package com.contacts.app.model;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class Contact {
     private String name;
     private String surname;
-    private PhoneNumber phoneNumber;
-    private Email email;
+    private String phoneNumber;
+    private String email;
     private long id;
+    private static final Pattern PHONE_NUMBER_REGEX = Pattern.compile("(\\+)?((\\d{2,3}) ?\\d|\\d)(([ -]?\\d)|( ?(\\d{2,3}) ?)){5,12}\\d");
+    private static final Pattern EMAIL_REGEX = Pattern.compile("[A-Za-z0-9._-]+@[A-Za-z0-9._-]+\\.[A-Za-z]{2,4}");
 
     public Contact(String name, String surname, String phoneNumber, String email, long id) {
         this.name = name;
         this.surname = surname;
-        this.phoneNumber = new PhoneNumber(phoneNumber);
-        this.email = new Email(email);
         this.id = id;
+        Matcher phoneMatcher = PHONE_NUMBER_REGEX.matcher(phoneNumber);
+        if (phoneMatcher.matches()) {
+            this.phoneNumber = phoneNumber;
+        } else {
+            throw new IllegalArgumentException("Номер телефона введен неправильно!");
+        }
+        Matcher emailMatcher = EMAIL_REGEX.matcher(email);
+        if (emailMatcher.matches()) {
+            this.email = email;
+        } else {
+            throw new IllegalArgumentException("E-mail введен неправильно!");
+        }
     }
 
     public String getName() {
@@ -23,20 +38,30 @@ public class Contact {
         this.name = name;
     }
 
-    public PhoneNumber getPhoneNumber() {
+    public String getPhoneNumber() {
         return this.phoneNumber;
     }
 
-    public void setPhoneNumber(PhoneNumber phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        Matcher phoneMatcher = PHONE_NUMBER_REGEX.matcher(phoneNumber);
+        if (phoneMatcher.matches()) {
+            this.phoneNumber = phoneNumber;
+        } else {
+            throw new IllegalArgumentException("Номер телефона введен неправильно!");
+        }
     }
 
-    public Email getEmail() {
+    public String getEmail() {
         return this.email;
     }
 
-    public void setEmail(Email email) {
-        this.email = email;
+    public void setEmail(String email) {
+        Matcher emailMatcher = EMAIL_REGEX.matcher(email);
+        if (emailMatcher.matches()) {
+            this.email = email;
+        } else {
+            throw new IllegalArgumentException("E-mail введен неправильно!");
+        }
     }
 
     public long getId() {
@@ -55,7 +80,6 @@ public class Contact {
         this.surname = surname;
     }
 
-
     @Override
     public String toString() {
         return "{" +
@@ -66,5 +90,4 @@ public class Contact {
             ", id='" + getId() + "'" +
             "}";
     }
-
 }
