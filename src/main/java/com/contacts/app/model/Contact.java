@@ -3,25 +3,36 @@ package com.contacts.app.model;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/* МОДЕЛЬ КОНТАКТА */
+// Класс представляет собой модель контакта, которая состоит из имени, фамилии, номера телефона, почты и ID
 public class Contact {
-    private String name;
-    private String surname;
-    private String phoneNumber;
-    private String email;
-    private long id;
-    private static final Pattern PHONE_NUMBER_REGEX = Pattern.compile("(\\+)?((\\d{2,3}) ?\\d|\\d)(([ -]?\\d)|( ?(\\d{2,3}) ?)){5,12}\\d");
-    private static final Pattern EMAIL_REGEX = Pattern.compile("[A-Za-z0-9._-]+@[A-Za-z0-9._-]+\\.[A-Za-z]{2,4}");
+    // Поля
+    private String name; // имя контакта
+    private String surname; // фамилия контакта
+    private String phoneNumber; // номер телефона контакта
+    private String email; // email контакта
+    private long id; // ID контакта
+    private static final Pattern PHONE_NUMBER_REGEX = Pattern
+            .compile("(\\+)?((\\d{2,3}) ?\\d|\\d)(([ -]?\\d)|( ?(\\d{2,3}) ?)){5,12}\\d"); // регулярное выражение для
+                                                                                           // номера телефона
+    private static final Pattern EMAIL_REGEX = Pattern.compile("[A-Za-z0-9._-]+@[A-Za-z0-9._-]+\\.[A-Za-z]{2,4}"); // регулярное
+                                                                                                                   // выражение
+                                                                                                                   // для
+                                                                                                                   // email
 
+    // Конструктор
     public Contact(String name, String surname, String phoneNumber, String email, long id) {
         this.name = name;
         this.surname = surname;
         this.id = id;
+        // для добавления номера телефона проверяем через регулярное выражение
         Matcher phoneMatcher = PHONE_NUMBER_REGEX.matcher(phoneNumber);
         if (phoneMatcher.matches()) {
             this.phoneNumber = phoneNumber;
         } else {
             throw new IllegalArgumentException("Номер телефона введен неправильно!");
         }
+        // для добавления email проверяем через регулярное выражение
         Matcher emailMatcher = EMAIL_REGEX.matcher(email);
         if (emailMatcher.matches()) {
             this.email = email;
@@ -30,6 +41,7 @@ public class Contact {
         }
     }
 
+    // Геттеры и сеттеры
     public String getName() {
         return this.name;
     }
@@ -42,6 +54,7 @@ public class Contact {
         return this.phoneNumber;
     }
 
+    // номера телефона можно засеттить только через регулярное выражение
     public void setPhoneNumber(String phoneNumber) {
         Matcher phoneMatcher = PHONE_NUMBER_REGEX.matcher(phoneNumber);
         if (phoneMatcher.matches()) {
@@ -55,6 +68,7 @@ public class Contact {
         return this.email;
     }
 
+    // почту можно засеттить только через регулярное выражение
     public void setEmail(String email) {
         Matcher emailMatcher = EMAIL_REGEX.matcher(email);
         if (emailMatcher.matches()) {
@@ -80,14 +94,15 @@ public class Contact {
         this.surname = surname;
     }
 
+    // Метод toString
     @Override
     public String toString() {
         return "{" +
-            " name='" + getName() + "'" +
-            ", surname='" + getSurname() + "'" +
-            ", phoneNumber='" + getPhoneNumber() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", id='" + getId() + "'" +
-            "}";
+                " name='" + getName() + "'" +
+                ", surname='" + getSurname() + "'" +
+                ", phoneNumber='" + getPhoneNumber() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", id='" + getId() + "'" +
+                "}";
     }
 }
